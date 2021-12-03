@@ -3,18 +3,6 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const getHighest = (numbers: number[]): number => {
-    let last = null;
-    let highers = 0;
-    for (const n of numbers) {
-        if (last && n > last) {
-            highers++;
-        }
-        last = n;
-    }
-    return highers;
-};
-
 (async () => {
     try {
         const { data } = await axios.get(
