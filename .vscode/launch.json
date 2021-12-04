@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/2021-day-03.ts",
+            "program": "${workspaceFolder}/2021-day-04-02.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": ["${workspaceFolder}/out/**/*.js"]
           }
