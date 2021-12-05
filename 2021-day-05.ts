@@ -1,7 +1,6 @@
 import * as utils from './utils';
 
-const getTestRawInput = () => {
-    return `0,9 -> 5,9
+const getTestRawInput = () => `0,9 -> 5,9
 8,0 -> 0,8
 9,4 -> 3,4
 2,2 -> 2,1
@@ -11,7 +10,6 @@ const getTestRawInput = () => {
 3,4 -> 1,4
 0,0 -> 8,8
 5,5 -> 8,2`;
-};
 
 const parseInput = (input: string) => {
     const lines = input.split('\n').filter(Boolean);
