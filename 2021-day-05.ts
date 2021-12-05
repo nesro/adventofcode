@@ -17,18 +17,14 @@ const parseInput = (input: string) => {
     const lines = input.split('\n').filter(Boolean);
     const points = lines.map((l) => l.split(' -> ').map((p) => p.split(',').map((n) => parseInt(n, 10))));
 
-    const flat = points.flat(2);
-    const min = Math.min(...flat);
-    const max = Math.max(...flat);
-
     // x1 = x2 or y1 = y2
     const horOrVer = points.filter((p) => p[0][0] === p[1][0] || p[0][1] === p[1][1]);
 
-    return { min, max, horOrVer, points };
+    return { horOrVer, points };
 };
 
 const main = (input: string, onlyHorVer = true) => {
-    const { min, max, horOrVer, points } = parseInput(input);
+    const { horOrVer, points } = parseInput(input);
 
     const field = [];
     const inputPoints = onlyHorVer ? horOrVer : points;
