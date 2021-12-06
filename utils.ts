@@ -1,4 +1,3 @@
-import path from 'path';
 import axios from 'axios';
 import fs from 'fs-extra';
 import dotenv from 'dotenv';
@@ -23,5 +22,11 @@ export const getInputData = async (year: number, day: number) => {
         });
         await fs.outputFile(inputPath, data);
         return data;
+    }
+};
+
+export const test = (input: unknown, expected: unknown) => {
+    if (input !== expected) {
+        throw new Error(`Expected ${expected} but got ${input}`);
     }
 };
