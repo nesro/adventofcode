@@ -53,8 +53,7 @@ const getBasinSize = (map: number[][], i, j) => {
         }
     }
 
-    const x = e.flat().filter((e) => e.isBasin).length;
-    return x;
+    return e.flat().filter((e) => e.isBasin).length;
 };
 
 const main = (input: string, part2 = false) => {
