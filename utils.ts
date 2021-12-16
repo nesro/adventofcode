@@ -26,7 +26,28 @@ export const getInputData = async (year: number, day: number) => {
 };
 
 export const test = (input: unknown, expected: unknown) => {
-    if (input !== expected) {
+    if (typeof input !== typeof expected) {
+        throw new Error(
+            `Input type is not the same as expected type. Expected: ${typeof expected}, got: ${typeof input}`,
+        );
+    }
+
+    if (typeof input === 'object') {
+        if (JSON.stringify(input) !== JSON.stringify(expected)) {
+            throw new Error(
+                `Input is not the same as expected. Expected: ${JSON.stringify(expected)}, got: ${JSON.stringify(
+                    input,
+                )}`,
+            );
+        }
+    } else if (input !== expected) {
         throw new Error(`Expected ${expected} but got ${input}`);
     }
+};
+
+export const testPart1 = (
+    func: (input: string, partTwo: boolean) => unknown,
+    { input, expected }: { input: string; expected: unknown },
+) => {
+    test(func(input, false), expected);
 };
