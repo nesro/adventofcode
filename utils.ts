@@ -51,3 +51,10 @@ export const testPart1 = (
 ) => {
     test(func(input, false), expected);
 };
+
+export const testPart2 = (
+    func: (input: string, partTwo: boolean) => unknown,
+    { input, expected }: { input: string; expected: unknown },
+) => {
+    test(func(input, true), expected);
+};
