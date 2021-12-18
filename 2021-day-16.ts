@@ -38,42 +38,42 @@ const testInput7 = {
 
 const testInput8 = {
     input: 'C200B40A82',
-    expected: 3,
+    expectedPartTwo: 3,
 };
 
 const testInput9 = {
     input: '04005AC33890',
-    expected: 54,
+    expectedPartTwo: 54,
 };
 
 const testInput10 = {
     input: '880086C3E88112',
-    expected: 7,
+    expectedPartTwo: 7,
 };
 
 const testInput11 = {
     input: 'CE00C43D881120',
-    expected: 9,
+    expectedPartTwo: 9,
 };
 
 const testInput12 = {
     input: 'D8005AC2A8F0',
-    expected: 1,
+    expectedPartTwo: 1,
 };
 
 const testInput13 = {
     input: 'F600BC2D8F',
-    expected: 0,
+    expectedPartTwo: 0,
 };
 
 const testInput14 = {
     input: '9C005AC2F8F0',
-    expected: 0,
+    expectedPartTwo: 0,
 };
 
 const testInput15 = {
     input: '9C0141080250320F1802104A08',
-    expected: 1,
+    expectedPartTwo: 1,
 };
 
 const parsePacket = (bits: string, i: number) => {

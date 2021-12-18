@@ -54,7 +54,7 @@ export const testPart1 = (
 
 export const testPart2 = (
     func: (input: string, partTwo: boolean) => unknown,
-    { input, expected }: { input: string; expected: unknown },
+    { input, expectedPartTwo }: { input: string; expectedPartTwo: unknown },
 ) => {
-    test(func(input, true), expected);
+    test(func(input, true), expectedPartTwo);
 };
