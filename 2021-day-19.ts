@@ -1,5 +1,7 @@
 import * as utils from './utils';
 
+const TEST = 1;
+
 const testInput1 = {
     input: `--- scanner 0 ---
 404,-588,-901
@@ -147,71 +149,107 @@ const distance = (a: [x: number, y: number, z: number], b: [x: number, y: number
 const getTransformations = ([x, y, z]: [x: number, y: number, z: number]) => {
     const trans = [];
 
+    // const arr = [x, y, z];
+    // [-1, 1].forEach((a) => {
+    //     [-1, 1].forEach((b) => {
+    //         [-1, 1].forEach((c) => {
+    //             [
+    //                 [0, 1, 2],
+    //                 [1, 2, 0],
+    //                 [2, 0, 1],
+    //                 [2, 1, 0],
+    //                 [1, 0, 2],
+    //                 [0, 2, 1],
+    //             ].forEach(([ix, iy, iz]) => {
+    //                 trans.push([a * arr[ix], b * arr[iy], c * arr[iz]]);
+    //             });
+    //         });
+    //     });
+    // });
+    // return trans;
+
     // game dice to axis
-    const s1 = x;
-    const s2 = -z;
-    const s3 = y;
-    const s4 = -y;
-    const s5 = z;
-    const s6 = -x;
+    // const s1 = x;
+    // const s2 = -z;
+    // const s3 = y;
+    // const s4 = -y;
+    // const s5 = z;
+    // const s6 = -x;
 
     // FACE 1, [face 1=x]
 
     // ROT 1 ( F ): [front 1=x, top 3=y, left=z] - (x,y,z) => (x,y,z)
-    trans.push([s1, s3, s5]);
+    // trans.push([s1, s3, s5]);
+    // trans.push([s1, s3, s5]);
+    trans.push([x, y, z]); /* TRANS = 0 */
 
     // ROT 2 ( ''_ ): [front 1=x, top 2=-z, left 3=y] - (x, y, z) => (x, -z, y)
-    trans.push([s1, s2, s3]);
+    // trans.push([s1, s2, s3]);
+    trans.push([x, -z, y]); /* TRANS = 1 */
 
     // ROT 3 ( ꓞ ): [front 1=x, top 4=-y, left 2=-z] - (x, y, z) => (x, -y, -z)
-    trans.push([s1, s4, s2]);
+    // trans.push([s1, s4, s2]);
+    trans.push([x, -y, -z]); /* TRANS = 2 */
 
     // ROT 4 ( -,, ): [front 1=x, top 5=z, left 4=-y] - (x, y, z) => (x, z, -y)
-    trans.push([s1, s5, s4]);
+    // trans.push([s1, s5, s4]);
+    trans.push([x, z, y]); /* TRANS = 3 */
 
     // FACE 2,[front 6=-x]
 
     // ROT 1 ( F ): [front 6=-x, top 3=y, left 2=-z] - (x, y, z) => (-x, y, -z)
-    trans.push([s6, s3, s2]);
+    // trans.push([s6, s3, s2]);
+    trans.push([-x, y, -z]); /* TRANS = 4 */
 
     // ROT 2 ( ''_ ): [front 6=-x, top 5=z, left 3=y] - (x, y, z) => (-x, z, y)
-    trans.push([-s6, s5, s3]);
+    // trans.push([s6, s5, s3]);
+    trans.push([-x, z, y]); /* TRANS = 5 */
 
     // ROT 3 ( ꓞ ): [front 6=-x, top 4=-y, left 5=z] - (x, y, z) => (-x, -y, z)
-    trans.push([s6, s4, s5]);
+    // trans.push([s6, s4, s5]);
+    trans.push([-x, -y, z]); /* TRANS = 6 */
 
     // ROT 4 ( -,, ): [front 6=-x, top 2=-z, left 5=-y] - (x, y, z) => (-x, -z, -y)
-    trans.push([s6, s2, s4]);
+    // trans.push([s6, s2, s4]);
+    trans.push([-x, -z, -y]); /* TRANS = 7 */
+
+    //...
 
     // FACE 3, [front 3=y]
-    trans.push([s3, s6 /*-x*/, s5 /*z*/]);
-    trans.push([s3, s2 /*-z*/, s6 /*-x*/]);
-    trans.push([s3, s1 /*x*/, s2 /*-z*/]);
-    trans.push([s3, s5 /*z*/, s1 /*x*/]);
+    trans.push([y, -x, z]); /* TRANS = 8 */
+    trans.push([y, -z, -x]); /* TRANS = 9 */
+    trans.push([y, x, -z]); /* TRANS = 10 */
+    trans.push([y, z, x]); /* TRANS = 11 */
 
     // FACE 4, [front 4=-y]
-    trans.push([s4, s1 /*x*/, s5 /*z*/]);
-    trans.push([s4, s2 /*-z*/, s1 /*x*/]);
-    trans.push([s4, s6 /*-x*/, s2 /*-z*/]);
-    trans.push([s4, s5 /*z*/, s6 /*-x*/]);
+    trans.push([-y, x, z]); /* TRANS = 12 */
+    trans.push([-y, -z, x]); /* TRANS = 13 */
+    trans.push([-y, -x, -z]); /* TRANS = 14 */
+    trans.push([-y, z, -x]); /* TRANS = 15 */
 
     // FACE 5, [front 5=z]
-    trans.push([s5, s1 /*x*/, s3 /*y*/]);
-    trans.push([s5, s4 /*-y*/, s1 /*x*/]);
-    trans.push([s5, s6 /*-x*/, s4 /*-y*/]);
-    trans.push([s5, s3 /*y*/, s6 /*-x*/]);
+    trans.push([z, x, y]); /* TRANS = 16 */
+    trans.push([z, -y, x]); /* TRANS = 17 */
+    trans.push([z, -x, -y]); /* TRANS = 18 */
+    trans.push([z, y, -x]); /* TRANS = 19 */
 
     // FACE 6, [front 2=-z]
-    trans.push([s2, s1 /*x*/, s4 /*-y*/]);
-    trans.push([s2, s3 /*y*/, s1 /*x*/]);
-    trans.push([s2, s6 /*-x*/, s3 /*y*/]);
-    trans.push([s2, s4 /*-y*/, s6 /*-x*/]);
+    trans.push([-z, x, -y]); /* TRANS = 20 */
+    trans.push([-z, y, x]); /* TRANS = 21 */
+    trans.push([-z, -x, y]); /* TRANS = 22 */
+    trans.push([-z, -y, -x]); /* TRANS = 23 */
 
     return trans;
 };
 
 const getVector = (from: [x: number, y: number, z: number], to: [x: number, y: number, z: number]) =>
     `[${to[0] - from[0]},${to[1] - from[1]},${to[2] - from[2]}]`;
+
+const getVectorAsArray = (from: [x: number, y: number, z: number], to: [x: number, y: number, z: number]) => [
+    to[0] - from[0],
+    to[1] - from[1],
+    to[2] - from[2],
+];
 
 const getVectors = (coords) => {
     const vectors = [];
@@ -238,14 +276,17 @@ const main = (input: string, partTwo = false) => {
             .map((s) => s.split(',').map(Number));
     }
 
-    const distances = [];
+    // dx, dy, dz
+    const finalVectors = new Map();
+
+    // const distances = [];
     const vectors = [];
 
     // map for each scanner => vector (from - to)
     const vectors2 = [];
 
     // first scanner distances
-    distances[0] = new Set();
+    // distances[0] = new Set();
     vectors[0] = new Set();
 
     vectors2[0] = new Map();
@@ -253,139 +294,219 @@ const main = (input: string, partTwo = false) => {
     const scannerLocations = [];
     scannerLocations[0] = [0, 0, 0];
 
-    for (let i = 0; i < scanners[0].length - 1; i++) {
-        for (let j = i + 1; j < scanners[0].length; j++) {
-            distances[0].add(distance(scanners[0][i], scanners[0][j]));
+    const TESTvariations = [];
 
-            const vec = getVector(scanners[0][i], scanners[0][j]);
-            vectors[0].add(vec);
+    const scannerRotations = [];
+    scannerRotations[0] = [0, 0, 0, 0, 0, 0];
 
-            vectors2[0].set(vec, [scanners[0][i], scanners[0][j]]);
-        }
-    }
+    // this is the scanner for that I will loop through other scanners
+    // BUT scanner 0 is the source of origin coords, S0 = [0,0,0]
+    for (let sourceScannerIndex = 0; sourceScannerIndex < scanners.length; sourceScannerIndex++) {
+        // compute vectors for the source scanner
+        vectors[sourceScannerIndex] = new Set();
+        vectors2[sourceScannerIndex] = new Map();
 
-    const transformedData = [];
-    scanners[1].forEach((coord) => {
-        const trans = getTransformations(coord);
-        for (const [i, t] of trans.entries()) {
-            if (!transformedData[i]) {
-                transformedData[i] = [t];
-            } else {
-                transformedData[i].push(t);
-            }
-        }
-    });
+        for (let i = 0; i < scanners[sourceScannerIndex].length - 1; i++) {
+            for (let j = i + 1; j < scanners[sourceScannerIndex].length; j++) {
+                // for (let i = 0; i < scanners[sourceScannerIndex].length; i++) {
+                //     for (let j = 0; j < scanners[sourceScannerIndex].length; j++) {
+                if (i === j) {
+                    continue;
+                }
+                const vec = getVector(scanners[sourceScannerIndex][i], scanners[sourceScannerIndex][j]);
 
-    // map [transId]
-
-    // second scanner
-    for (const [dataSetIndex, dataSet] of transformedData.entries()) {
-        const transDist = new Set();
-        const transVec = new Set();
-        const transVec2 = new Map();
-        for (let i = 0; i < dataSet.length - 1; i++) {
-            for (let j = i + 1; j < dataSet.length; j++) {
-                transDist.add(distance(dataSet[i], dataSet[j]));
-                const vec = getVector(dataSet[i], dataSet[j]);
-                transVec.add(vec);
-                transVec2.set(vec, [dataSet[i], dataSet[j]]);
+                vectors[sourceScannerIndex].add(vec);
+                vectors2[sourceScannerIndex].set(vec, [
+                    scanners[sourceScannerIndex][i],
+                    scanners[sourceScannerIndex][j],
+                ]);
             }
         }
 
-        // find intersect
-        const intersect = [...distances[0]].filter((x) => transDist.has(x));
-        const intersectVec = [...vectors[0]].filter((x) => transVec.has(x));
+        // now loop through other scanners
+        for (let scannerIndex = sourceScannerIndex + 1; scannerIndex < scanners.length; scannerIndex++) {
+            // for (let scannerIndex = 0; scannerIndex < scanners.length; scannerIndex++) {
+            //     if (sourceScannerIndex === scannerIndex) {
+            //         continue;
+            //     }
+            TESTvariations.push(`${sourceScannerIndex}-${scannerIndex}`);
 
-        const len = intersectVec.length;
+            const transformedData = [];
+            scanners[scannerIndex].forEach((coord) => {
+                const trans = getTransformations(coord);
+                for (const [i, t] of trans.entries()) {
+                    if (!transformedData[i]) {
+                        transformedData[i] = [t];
+                    } else {
+                        transformedData[i].push(t);
+                    }
+                }
+            });
 
-        if (len >= 12) {
-            // najdu stred z scanneru 0
+            for (const [dataSetIndex, dataSet] of transformedData.entries()) {
+                // const transVec = new Set();
+                const transVec2 = new Map();
+                for (let i = 0; i < dataSet.length - 1; i++) {
+                    for (let j = i + 1; j < dataSet.length; j++) {
+                        // for (let i = 0; i < dataSet.length; i++) {
+                        //     for (let j = 0; j < dataSet.length; j++) {
+                        //         if (i === j) {
+                        //             continue;
+                        //         }
+                        const vec = getVector(dataSet[i], dataSet[j]);
 
-            // tady jsem zjistil, ze rotace "4" ma stejny vektory. jdu overit???
+                        transVec2.set(vec, [dataSet[i], dataSet[j]]);
 
-            const pointsFromS0 = new Set();
-
-            for (const vec of intersectVec) {
-                // [404, -588, -901]
-                // [528, -643, 409]
-                // --------------------
-                // [124, -55, 1310]
-
-                // [336, 658, -858]
-                // [460, 603, 452]
-
-                // x0 = 404, x1 = 336, => scanner#1 x = 68
-                // y0 = -588, y1 = 658, => scanner#1 y = -1246
-                // z0 = -901, z1 = -858, => scanner#1 z = -43
-
-                // 336 - 68 = 268
-
-                // vezmu puvodni body z vektoru
-
-                const a = vectors2[0].get(vec);
-                pointsFromS0.add(a[0]);
-                pointsFromS0.add(a[1]);
-                const b = transVec2.get(vec);
-
-                const scannerLocation = [a[0][0] - b[0][0], a[0][1] - b[0][1], a[0][2] - b[0][2]];
-                if (!scannerLocations[1]) {
-                    scannerLocations[1] = scannerLocation;
-                } else {
-                    // check if same
-                    if (scannerLocations[1].toString() !== scannerLocation.toString()) {
-                        throw new Error('different scanner locations, but should be the same');
+                        // TODO: tohle pomohlo.
+                        // const vec2 = getVectorAsArray(dataSet[i], dataSet[j]);
+                        // getTransformations([vec2[0], vec2[1], vec2[2]]).forEach((t, transIndex) => {
+                        //     const s = `[${t[0]},${t[1]},${t[2]}]`;
+                        //     transVec2.set(s, [dataSet[i], dataSet[j], transIndex]);
+                        // });
                     }
                 }
 
-                console.log(a, b);
-            }
+                const intersectVec = [...vectors[sourceScannerIndex]].filter((x) => transVec2.has(x));
 
-            console.log(dataSet, intersect, len);
+                const len = intersectVec.length;
+
+                if (len >= 12) {
+                    console.log('FOUND ONE');
+
+                    for (const vec of intersectVec) {
+                        const a = vectors2[sourceScannerIndex].get(vec);
+                        // pointsFromSourceScanner.add(a[0]);
+                        // pointsFromSourceScanner.add(a[1]);
+
+                        const b = transVec2.get(vec);
+
+                        // TODO: NOT SOURCE
+                        // pointsFromSourceScanner.add(b[0]);
+                        // pointsFromSourceScanner.add(b[1]);
+
+                        if (!scannerLocations[scannerIndex] && sourceScannerIndex !== 0) {
+                            scannerLocations[sourceScannerIndex];
+
+                            let xxscan;
+
+                            // musim najit ktera transformace tady ma byt
+                            // if (scannerIndex === 2) {
+                            //     xxscan = [
+                            //         b[0][0] - scannerLocations[sourceScannerIndex][0] - a[0][0],
+                            //         b[0][1] - scannerLocations[sourceScannerIndex][1] - a[0][1],
+                            //         b[0][2] - scannerLocations[sourceScannerIndex][2] - a[0][2],
+                            //     ];
+                            // } else {
+
+                            xxscan = [
+                                -(a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0]),
+                                a[0][1] + scannerLocations[sourceScannerIndex][1] - b[0][1],
+                                -(a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2]),
+                            ];
+
+                            // // 7 je -x, -z, -y]
+                            // xxscan = [
+                            //     a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0],
+                            //     a[0][1] - scannerLocations[sourceScannerIndex][1] - b[0][1],
+                            //     a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2],
+                            // ];
+
+                            // }
+
+                            //1105,-1205,1229 SCANNER 2
+                            scannerLocations[scannerIndex] = xxscan;
+
+                            console.log(xxscan);
+                        }
+
+                        // TODO: this must be relative to scanner 0
+                        const scannerLocation = [a[0][0] - b[0][0], a[0][1] - b[0][1], a[0][2] - b[0][2]];
+                        if (!scannerLocations[scannerIndex]) {
+                            scannerLocations[scannerIndex] = scannerLocation;
+                        } else {
+                            // check if same
+                            if (scannerLocations[scannerIndex].toString() !== scannerLocation.toString()) {
+                                // TODO: enable this check
+                                // throw new Error('different scanner locations, but should be the same');
+                            }
+                        }
+                    }
+
+                    // finalVectors.set(`${sourceScannerIndex}-${scannerIndex}`, pointsFromSourceScanner);
+                    // console.log(dataSet, len, pointsFromSourceScanner);
+
+                    if (sourceScannerIndex !== 0) {
+                        // TODO: musim prepocitat na souradnice z scanneru 0
+                        console.log('a');
+                    }
+                }
+            }
         }
     }
 
-    // const vector2scanner = new Map();
+    if (TEST) {
+        if (scannerLocations[1].toString() !== `68,-1246,-43`) {
+            throw new Error('wrong scanner 1 location');
+        }
+        // if (scannerLocations[2]?.toString() !== `1105,-1205,1229`) {
+        //     throw new Error('wrong scanner 2 location');
+        // }
 
-    // for (const [i, scanner] of scanners.entries()) {
-    //     for (const coord of scanner) {
-    //         const trans = getTransformations(coord);
-    //         const vectors = getVectors(trans);
+        scannerLocations[2] = [1105, -1205, 1229];
 
-    //         vectors.forEach((v) => {
-    //             const key = `${v}`;
+        if (scannerLocations[3].toString() !== `-92,-2380,-20`) {
+            throw new Error('wrong scanner 3 location');
+        }
+        if (scannerLocations[4].toString() !== `-20,-1133,1061`) {
+            throw new Error('wrong scanner 4 location');
+        }
+    }
 
-    //             // console.log(key);
+    // projedu vsechny data, prepocitam k sceneru 0 - ale az budu mit dobre lokaci skeneru
 
-    //             if (vector2scanner.has(key)) {
-    //                 const existing = vector2scanner.get(key);
-    //                 if (!existing.includes(i)) {
-    //                     existing.push(i);
-    //                 }
-    //                 vector2scanner.set(key, existing);
-    //             } else {
-    //                 vector2scanner.set(key, [i]);
-    //             }
+    // TODO: aby mi to licovalo, musim to jeste otocit..
+    const finalPoints = new Set();
+    for (let i = 0; i < scanners.length; i++) {
+        const scannerLocation = scannerLocations[i];
+        for (let j = 0; j < scanners[i].length; j++) {
+            const scanner = scanners[i][j];
+            const point = [
+                scannerLocation[0] + scanner[0],
+                scannerLocation[1] + scanner[1],
+                scannerLocation[2] + scanner[2],
+            ];
 
-    //             // vector2scanner[] = (vector2scanner[`${v}`] || 0) + 1;
-    //         });
-    //     }
-    // }
+            finalPoints.add(point);
+        }
+    }
 
-    // const l = vector2scanner.size;
-    // let count = 0;
-    // vector2scanner.forEach((scanners, vector) => {
-    //     if (scanners.length >= 2) {
-    //         // console.log(scanners, vector);
-    //         count++;
-    //     }
-    // });
+    const sortedFinal = [...finalPoints].sort((a, b) => a[0] - b[0]);
 
-    // console.log(count);
+    return finalPoints.size;
+};
 
-    return 1;
+const main2 = (input: string, partTwo = false) => {
+    const scannersRaw = input.split('\n\n');
+
+    const scanners = [];
+    let scannersIndex = 0;
+    for (const scannerRaw of scannersRaw) {
+        scanners[scannersIndex++] = scannerRaw
+            .split('\n')
+            .filter((s) => !s.includes('scanner'))
+            .map((s) => s.split(',').map(Number));
+    }
+
+    for (const rotX of [-1, 1]) {
+        for (const rotY of [-1, 1]) {
+            for (const rotZ of [-1, 1]) {
+            }
+        }
+    }
 };
 
 (async () => {
+    // try {
     utils.testPart1(main, testInput1);
 
     // const input = await utils.getInputData(2021, 20);
@@ -399,4 +520,8 @@ const main = (input: string, partTwo = false) => {
 
     // console.log(`Result 1: ${result1}`);
     // console.log(`Result 2: ${result2}`);
+    // } catch (err) {
+    //     console.error(`Error: ${err}`, err);
+    //     process.exit(1);
+    // }
 })();
