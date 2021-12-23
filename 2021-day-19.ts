@@ -1,4 +1,5 @@
 import * as utils from './utils';
+import ndarray from 'ndarray';
 
 const TEST = 1;
 
@@ -146,101 +147,116 @@ const testInput1 = {
 const distance = (a: [x: number, y: number, z: number], b: [x: number, y: number, z: number]) =>
     Math.sqrt(Math.pow(b[0] - a[0], 2) + Math.pow(b[1] - a[1], 2) + Math.pow(b[2] - a[2], 2));
 
-const getTransformations = ([x, y, z]: [x: number, y: number, z: number]) => {
+// [signX, signY, signZ, posX, posY, posZ]
+const getTransformations = () => {
     const trans = [];
 
-    // const arr = [x, y, z];
     // [-1, 1].forEach((a) => {
     //     [-1, 1].forEach((b) => {
     //         [-1, 1].forEach((c) => {
-    //             [
-    //                 [0, 1, 2],
-    //                 [1, 2, 0],
-    //                 [2, 0, 1],
-    //                 [2, 1, 0],
-    //                 [1, 0, 2],
-    //                 [0, 2, 1],
-    //             ].forEach(([ix, iy, iz]) => {
-    //                 trans.push([a * arr[ix], b * arr[iy], c * arr[iz]]);
-    //             });
+    //             trans.push([a, b, c, 0, 1, 2]);
+    //             trans.push([a, b, c, 1, 2, 0]);
+    //             trans.push([a, b, c, 2, 0, 1]);
+
+    //             trans.push([a, b, c, 0, 2, 1]);
+    //             trans.push([a, b, c, 2, 1, 0]);
+    //             trans.push([a, b, c, 1, 0, 2]);
     //         });
     //     });
     // });
     // return trans;
 
-    // game dice to axis
-    // const s1 = x;
-    // const s2 = -z;
-    // const s3 = y;
-    // const s4 = -y;
-    // const s5 = z;
-    // const s6 = -x;
-
-    // FACE 1, [face 1=x]
-
-    // ROT 1 ( F ): [front 1=x, top 3=y, left=z] - (x,y,z) => (x,y,z)
-    // trans.push([s1, s3, s5]);
-    // trans.push([s1, s3, s5]);
-    trans.push([x, y, z]); /* TRANS = 0 */
+    // trans.push([x, y, z]); /* TRANS = 0 */
+    // trans.push([1, 2, 3]);
+    trans.push([1, 1, 1, 0, 1, 2]);
 
     // ROT 2 ( ''_ ): [front 1=x, top 2=-z, left 3=y] - (x, y, z) => (x, -z, y)
     // trans.push([s1, s2, s3]);
-    trans.push([x, -z, y]); /* TRANS = 1 */
+    // trans.push([x, -z, y]); /* TRANS = 1 */
+    trans.push([1, 1, 1, 0, 2, 1]);
 
     // ROT 3 ( ꓞ ): [front 1=x, top 4=-y, left 2=-z] - (x, y, z) => (x, -y, -z)
     // trans.push([s1, s4, s2]);
-    trans.push([x, -y, -z]); /* TRANS = 2 */
+    // trans.push([x, -y, -z]); /* TRANS = 2 */
+    trans.push([1, -1, -1, 0, 1, 2]);
 
     // ROT 4 ( -,, ): [front 1=x, top 5=z, left 4=-y] - (x, y, z) => (x, z, -y)
     // trans.push([s1, s5, s4]);
-    trans.push([x, z, y]); /* TRANS = 3 */
+    // trans.push([x, z, y]); /* TRANS = 3 */
+    trans.push([1, 1, 1, 0, 2, 1]);
 
     // FACE 2,[front 6=-x]
 
     // ROT 1 ( F ): [front 6=-x, top 3=y, left 2=-z] - (x, y, z) => (-x, y, -z)
     // trans.push([s6, s3, s2]);
-    trans.push([-x, y, -z]); /* TRANS = 4 */
+    // trans.push([-x, y, -z]); /* TRANS = 4 */
+    trans.push([-1, 1, -1, 0, 1, 2]);
 
     // ROT 2 ( ''_ ): [front 6=-x, top 5=z, left 3=y] - (x, y, z) => (-x, z, y)
     // trans.push([s6, s5, s3]);
-    trans.push([-x, z, y]); /* TRANS = 5 */
+    // trans.push([-x, z, y]); /* TRANS = 5 */
+    trans.push([-1, 1, 1, 0, 2, 1]);
 
     // ROT 3 ( ꓞ ): [front 6=-x, top 4=-y, left 5=z] - (x, y, z) => (-x, -y, z)
     // trans.push([s6, s4, s5]);
-    trans.push([-x, -y, z]); /* TRANS = 6 */
+    // trans.push([-x, -y, z]); /* TRANS = 6 */
+    trans.push([-1, -1, 1, 0, 1, 2]);
 
     // ROT 4 ( -,, ): [front 6=-x, top 2=-z, left 5=-y] - (x, y, z) => (-x, -z, -y)
     // trans.push([s6, s2, s4]);
-    trans.push([-x, -z, -y]); /* TRANS = 7 */
+    // trans.push([-x, -z, -y]); /* TRANS = 7 */
+    trans.push([-1, -1, -1, 0, 2, 1]);
 
     //...
 
     // FACE 3, [front 3=y]
-    trans.push([y, -x, z]); /* TRANS = 8 */
-    trans.push([y, -z, -x]); /* TRANS = 9 */
-    trans.push([y, x, -z]); /* TRANS = 10 */
-    trans.push([y, z, x]); /* TRANS = 11 */
+    // trans.push([y, -x, z]); /* TRANS = 8 */
+    // trans.push([y, -z, -x]); /* TRANS = 9 */
+    // trans.push([y, x, -z]); /* TRANS = 10 */
+    // trans.push([y, z, x]); /* TRANS = 11 */
+    trans.push([1, -1, 1, 1, 0, 2]);
+    trans.push([1, -1, -1, 1, 2, 0]);
+    trans.push([1, 1, -1, 1, 0, 2]);
+    trans.push([1, 1, 1, 1, 2, 0]);
 
     // FACE 4, [front 4=-y]
-    trans.push([-y, x, z]); /* TRANS = 12 */
-    trans.push([-y, -z, x]); /* TRANS = 13 */
-    trans.push([-y, -x, -z]); /* TRANS = 14 */
-    trans.push([-y, z, -x]); /* TRANS = 15 */
+    // trans.push([-y, x, z]); /* TRANS = 12 */
+    // trans.push([-y, -z, x]); /* TRANS = 13 */
+    // trans.push([-y, -x, -z]); /* TRANS = 14 */
+    // trans.push([-y, z, -x]); /* TRANS = 15 */
+    trans.push([-1, 1, 1, 1, 0, 2]);
+    trans.push([-1, -1, 1, 1, 2, 0]);
+    trans.push([-1, -1, -1, 1, 0, 2]);
+    trans.push([-1, 1, -1, 1, 2, 0]);
 
     // FACE 5, [front 5=z]
-    trans.push([z, x, y]); /* TRANS = 16 */
-    trans.push([z, -y, x]); /* TRANS = 17 */
-    trans.push([z, -x, -y]); /* TRANS = 18 */
-    trans.push([z, y, -x]); /* TRANS = 19 */
+    // trans.push([z, x, y]); /* TRANS = 16 */
+    // trans.push([z, -y, x]); /* TRANS = 17 */
+    // trans.push([z, -x, -y]); /* TRANS = 18 */
+    // trans.push([z, y, -x]); /* TRANS = 19 */
+    trans.push([1, 1, -1, 2, 0, 1]);
+    trans.push([1, -1, 1, 2, 1, 0]);
+    trans.push([1, -1, -1, 2, 0, 1]);
+    trans.push([1, 1, -1, 2, 1, 0]);
 
     // FACE 6, [front 2=-z]
-    trans.push([-z, x, -y]); /* TRANS = 20 */
-    trans.push([-z, y, x]); /* TRANS = 21 */
-    trans.push([-z, -x, y]); /* TRANS = 22 */
-    trans.push([-z, -y, -x]); /* TRANS = 23 */
+    // trans.push([-z, x, -y]); /* TRANS = 20 */
+    // trans.push([-z, y, x]); /* TRANS = 21 */
+    // trans.push([-z, -x, y]); /* TRANS = 22 */
+    // trans.push([-z, -y, -x]); /* TRANS = 23 */
+    trans.push([-1, 1, -1, 2, 0, 1]);
+    trans.push([-1, 1, 1, 2, 1, 0]);
+    trans.push([-1, -1, 1, 2, 0, 1]);
+    trans.push([-1, -1, -1, 2, 1, 0]);
 
     return trans;
 };
+
+const transform = (trans, point: [x: number, y: number, z: number]) => [
+    trans[0] * point[trans[3]],
+    trans[1] * point[trans[4]],
+    trans[2] * point[trans[5]],
+];
 
 const getVector = (from: [x: number, y: number, z: number], to: [x: number, y: number, z: number]) =>
     `[${to[0] - from[0]},${to[1] - from[1]},${to[2] - from[2]}]`;
@@ -264,6 +280,16 @@ const getVectors = (coords) => {
     return vectors;
 };
 
+const mapInc = (map, key) => {
+    const item = map.get(key);
+
+    if (item) {
+        map.set(key, item + 1);
+    } else {
+        map.set(key, 1);
+    }
+};
+
 const main = (input: string, partTwo = false) => {
     const scannersRaw = input.split('\n\n');
 
@@ -276,19 +302,11 @@ const main = (input: string, partTwo = false) => {
             .map((s) => s.split(',').map(Number));
     }
 
-    // dx, dy, dz
-    const finalVectors = new Map();
-
-    // const distances = [];
     const vectors = [];
-
     // map for each scanner => vector (from - to)
     const vectors2 = [];
 
-    // first scanner distances
-    // distances[0] = new Set();
     vectors[0] = new Set();
-
     vectors2[0] = new Map();
 
     const scannerLocations = [];
@@ -296,153 +314,310 @@ const main = (input: string, partTwo = false) => {
 
     const TESTvariations = [];
 
-    const scannerRotations = [];
-    scannerRotations[0] = [0, 0, 0, 0, 0, 0];
+    const scannerTransformations = [];
+    scannerTransformations[0] = [1, 1, 1, 0, 1, 2];
 
-    // this is the scanner for that I will loop through other scanners
-    // BUT scanner 0 is the source of origin coords, S0 = [0,0,0]
-    for (let sourceScannerIndex = 0; sourceScannerIndex < scanners.length; sourceScannerIndex++) {
-        // compute vectors for the source scanner
-        vectors[sourceScannerIndex] = new Set();
-        vectors2[sourceScannerIndex] = new Map();
-
-        for (let i = 0; i < scanners[sourceScannerIndex].length - 1; i++) {
-            for (let j = i + 1; j < scanners[sourceScannerIndex].length; j++) {
-                // for (let i = 0; i < scanners[sourceScannerIndex].length; i++) {
-                //     for (let j = 0; j < scanners[sourceScannerIndex].length; j++) {
-                if (i === j) {
-                    continue;
-                }
-                const vec = getVector(scanners[sourceScannerIndex][i], scanners[sourceScannerIndex][j]);
-
-                vectors[sourceScannerIndex].add(vec);
-                vectors2[sourceScannerIndex].set(vec, [
-                    scanners[sourceScannerIndex][i],
-                    scanners[sourceScannerIndex][j],
-                ]);
+    // until DONE
+    for (;;) {
+        let missingAny = false;
+        for (let i = 0; i < scanners.length; i++) {
+            if (!scannerLocations[i]) {
+                missingAny = true;
+                break;
             }
         }
+        if (!missingAny) {
+            break;
+        }
 
-        // now loop through other scanners
-        for (let scannerIndex = sourceScannerIndex + 1; scannerIndex < scanners.length; scannerIndex++) {
-            // for (let scannerIndex = 0; scannerIndex < scanners.length; scannerIndex++) {
-            //     if (sourceScannerIndex === scannerIndex) {
-            //         continue;
-            //     }
-            TESTvariations.push(`${sourceScannerIndex}-${scannerIndex}`);
+        // this is the scanner for that I will loop through other scanners
+        // BUT scanner 0 is the source of origin coords, S0 = [0,0,0]
+        for (let sourceScannerIndex = 0; sourceScannerIndex < scanners.length; sourceScannerIndex++) {
+            // if (scannerTransformations[sourceScannerIndex] === undefined) {
+            //     console.error(`scannerTransformations[${sourceScannerIndex}] is undefined, continue, maybe later`);
+            //     continue;
+            // }
 
-            const transformedData = [];
-            scanners[scannerIndex].forEach((coord) => {
-                const trans = getTransformations(coord);
-                for (const [i, t] of trans.entries()) {
-                    if (!transformedData[i]) {
-                        transformedData[i] = [t];
-                    } else {
-                        transformedData[i].push(t);
+            // compute vectors for the source scanner
+            vectors[sourceScannerIndex] = new Set();
+            vectors2[sourceScannerIndex] = new Map();
+
+            // TODO: je tohle dobre? = jo tohle je dobre
+            // for (let i = 0; i < scanners[sourceScannerIndex].length - 1; i++) {
+            //     for (let j = i + 1; j < scanners[sourceScannerIndex].length; j++) {
+            for (let i = 0; i < scanners[sourceScannerIndex].length; i++) {
+                for (let j = 0; j < scanners[sourceScannerIndex].length; j++) {
+                    if (i === j) {
+                        continue;
                     }
+                    const vec = getVector(scanners[sourceScannerIndex][i], scanners[sourceScannerIndex][j]);
+
+                    vectors[sourceScannerIndex].add(vec);
+                    vectors2[sourceScannerIndex].set(vec, [
+                        scanners[sourceScannerIndex][i],
+                        scanners[sourceScannerIndex][j],
+                    ]);
                 }
-            });
+            }
 
-            for (const [dataSetIndex, dataSet] of transformedData.entries()) {
-                // const transVec = new Set();
-                const transVec2 = new Map();
-                for (let i = 0; i < dataSet.length - 1; i++) {
-                    for (let j = i + 1; j < dataSet.length; j++) {
-                        // for (let i = 0; i < dataSet.length; i++) {
-                        //     for (let j = 0; j < dataSet.length; j++) {
-                        //         if (i === j) {
-                        //             continue;
-                        //         }
-                        const vec = getVector(dataSet[i], dataSet[j]);
+            // now loop through other scanners
+            // for (let scannerIndex = sourceScannerIndex + 1; scannerIndex < scanners.length; scannerIndex++) {
+            for (let scannerIndex = 0; scannerIndex < scanners.length; scannerIndex++) {
+                if (sourceScannerIndex === scannerIndex) {
+                    continue;
+                }
+                TESTvariations.push(`${sourceScannerIndex}-${scannerIndex}`);
 
-                        transVec2.set(vec, [dataSet[i], dataSet[j]]);
-
-                        // TODO: tohle pomohlo.
-                        // const vec2 = getVectorAsArray(dataSet[i], dataSet[j]);
-                        // getTransformations([vec2[0], vec2[1], vec2[2]]).forEach((t, transIndex) => {
-                        //     const s = `[${t[0]},${t[1]},${t[2]}]`;
-                        //     transVec2.set(s, [dataSet[i], dataSet[j], transIndex]);
-                        // });
+                for (const trans of getTransformations()) {
+                    const beacons = [];
+                    for (let beaconIndex = 0; beaconIndex < scanners[scannerIndex].length; beaconIndex++) {
+                        const beacon = scanners[scannerIndex][beaconIndex];
+                        const beaconTransformed = transform(trans, beacon);
+                        beacons.push(beaconTransformed);
                     }
-                }
 
-                const intersectVec = [...vectors[sourceScannerIndex]].filter((x) => transVec2.has(x));
-
-                const len = intersectVec.length;
-
-                if (len >= 12) {
-                    console.log('FOUND ONE');
-
-                    for (const vec of intersectVec) {
-                        const a = vectors2[sourceScannerIndex].get(vec);
-                        // pointsFromSourceScanner.add(a[0]);
-                        // pointsFromSourceScanner.add(a[1]);
-
-                        const b = transVec2.get(vec);
-
-                        // TODO: NOT SOURCE
-                        // pointsFromSourceScanner.add(b[0]);
-                        // pointsFromSourceScanner.add(b[1]);
-
-                        if (!scannerLocations[scannerIndex] && sourceScannerIndex !== 0) {
-                            scannerLocations[sourceScannerIndex];
-
-                            let xxscan;
-
-                            // musim najit ktera transformace tady ma byt
-                            // if (scannerIndex === 2) {
-                            //     xxscan = [
-                            //         b[0][0] - scannerLocations[sourceScannerIndex][0] - a[0][0],
-                            //         b[0][1] - scannerLocations[sourceScannerIndex][1] - a[0][1],
-                            //         b[0][2] - scannerLocations[sourceScannerIndex][2] - a[0][2],
-                            //     ];
-                            // } else {
-
-                            xxscan = [
-                                -(a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0]),
-                                a[0][1] + scannerLocations[sourceScannerIndex][1] - b[0][1],
-                                -(a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2]),
-                            ];
-
-                            // // 7 je -x, -z, -y]
-                            // xxscan = [
-                            //     a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0],
-                            //     a[0][1] - scannerLocations[sourceScannerIndex][1] - b[0][1],
-                            //     a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2],
-                            // ];
-
-                            // }
-
-                            //1105,-1205,1229 SCANNER 2
-                            scannerLocations[scannerIndex] = xxscan;
-
-                            console.log(xxscan);
+                    const beaconVectors = new Map();
+                    // for (let i = 0; i < beacons.length - 1; i++) {
+                    //     for (let j = i + 1; j < beacons.length; j++) {
+                    for (let i = 0; i < beacons.length; i++) {
+                        for (let j = 0; j < beacons.length; j++) {
+                            if (i === j) {
+                                continue;
+                            }
+                            const vec = getVector(beacons[i], beacons[j]);
+                            beaconVectors.set(vec, [beacons[i], beacons[j]]);
                         }
+                    }
 
-                        // TODO: this must be relative to scanner 0
-                        const scannerLocation = [a[0][0] - b[0][0], a[0][1] - b[0][1], a[0][2] - b[0][2]];
-                        if (!scannerLocations[scannerIndex]) {
-                            scannerLocations[scannerIndex] = scannerLocation;
-                        } else {
-                            // check if same
-                            if (scannerLocations[scannerIndex].toString() !== scannerLocation.toString()) {
-                                // TODO: enable this check
-                                // throw new Error('different scanner locations, but should be the same');
+                    const intersectVec = [...vectors[sourceScannerIndex]].filter((x) => beaconVectors.has(x));
+
+                    if (intersectVec.length >= 12) {
+                        console.log('MATCH', sourceScannerIndex, scannerIndex, intersectVec, trans);
+
+                        // TODO: --
+
+                        const distancesX = new Map();
+                        const distancesY = new Map();
+                        const distancesZ = new Map();
+                        for (let i = 0; i < scanners[sourceScannerIndex].length; i++) {
+                            const sourcePoint = scanners[sourceScannerIndex][i];
+                            for (let j = 0; j < scanners[scannerIndex].length; j++) {
+                                const t = transform(trans, scanners[scannerIndex][j]);
+
+                                const dX = sourcePoint[0] - t[0];
+                                const dY = sourcePoint[1] - t[1];
+                                const dZ = sourcePoint[2] - t[2];
+
+                                mapInc(distancesX, dX);
+                                mapInc(distancesY, dY);
+                                mapInc(distancesZ, dZ);
                             }
                         }
-                    }
 
-                    // finalVectors.set(`${sourceScannerIndex}-${scannerIndex}`, pointsFromSourceScanner);
-                    // console.log(dataSet, len, pointsFromSourceScanner);
+                        let originX = -666;
+                        let originY = -666;
+                        let originZ = -666;
 
-                    if (sourceScannerIndex !== 0) {
-                        // TODO: musim prepocitat na souradnice z scanneru 0
-                        console.log('a');
+                        for (const [k, v] of distancesX) {
+                            if (v >= 12) {
+                                originX = k;
+                                break;
+                            }
+                        }
+                        for (const [k, v] of distancesY) {
+                            if (v >= 12) {
+                                originY = k;
+                                break;
+                            }
+                        }
+                        for (const [k, v] of distancesZ) {
+                            if (v >= 12) {
+                                originZ = k;
+                                break;
+                            }
+                        }
+
+                        // pouze pokud jsem nasel rozumny origin, jinak zkusit znova
+                        // TODO: proc mi to sem leze i kdyz mam scannerIndex = 0 ?
+                        if (
+                            !scannerLocations[scannerIndex] &&
+                            originX !== -666 &&
+                            originY !== -666 &&
+                            originZ !== -666
+                        ) {
+                            // TODO: proc mam spatne ty rotace tady. jak to zjistim? co s cim a jaky znainka
+                            // originX=160    =>   160 + -68 -  = -92
+                            // originY=-1134  => -1134 + -1246 = -2380
+                            // originZ=-23    =>   -23 - -43 = 20
+
+                            originX =
+                                scannerLocations[sourceScannerIndex][0] +
+                                scannerTransformations[sourceScannerIndex][0] * originX;
+                            originY =
+                                scannerLocations[sourceScannerIndex][1] +
+                                scannerTransformations[sourceScannerIndex][1] * originY;
+                            originZ =
+                                scannerLocations[sourceScannerIndex][2] +
+                                scannerTransformations[sourceScannerIndex][2] * originZ;
+
+                            // 1: 68,-1246,-43
+                            // 2: 1105,-1205,1229
+                            // 3: -92,-2380,-20
+                            // 4: -20,-1133,1061
+
+                            scannerLocations[scannerIndex] = [originX, originY, originZ];
+                            scannerTransformations[scannerIndex] = trans;
+                            console.log('hu');
+                        }
+
+                        // TODO: --
+
+                        // const a = vectors2[sourceScannerIndex].get(intersectVec[0]);
+                        // const b = beaconVectors.get(intersectVec[0]);
+                        // const scannerLocation = [
+                        //     // a[0][0] + scannerLocations[sourceScannerIndex][0] - b[0][0],
+                        //     // a[0][1] - scannerLocations[sourceScannerIndex][1] - b[0][1],
+                        //     // a[0][2] + scannerLocations[sourceScannerIndex][2] - b[0][2],
+                        //     a[0][trans[3]] + -trans[0] * scannerLocations[sourceScannerIndex][0] - b[0][0],
+                        //     a[0][trans[4]] + -trans[1] * scannerLocations[sourceScannerIndex][1] - b[0][1],
+                        //     a[0][trans[5]] + -trans[2] * scannerLocations[sourceScannerIndex][2] - b[0][2],
+                        // ];
+                        // console.log('a');
+
+                        // // TODO: tady znovu projedu vsechny orig a transform body
+
+                        // if (scannerLocations[scannerIndex]) {
+                        //     if (scannerLocations[scannerIndex].toString() !== scannerLocation.toString()) {
+                        //         // throw new Error('different scanner locations, but should be the same');
+                        //     }
+                        // } else {
+                        //     scannerLocations[scannerIndex] = scannerLocation;
+                        //     scannerTransformations[scannerIndex] = trans;
+                        //     // kdyz ted vim, ze matchuju s S0, muzu otocit vsechny beamy
+                        //     for (let i = 0; i < scanners[scannerIndex]; i++) {
+                        //         // !!!! MENIM SOURCE DATA !!!!
+                        //         // scanners[scannerIndex][i] = transform(trans, scanners[scannerIndex][i]);
+                        //     }
+                        // }
                     }
                 }
+
+                // const transformedData = [];
+                // scanners[scannerIndex].forEach((coord) => {
+                //     const trans = getTransformations(coord);
+                //     for (const [i, t] of trans.entries()) {
+                //         if (!transformedData[i]) {
+                //             transformedData[i] = [t];
+                //         } else {
+                //             transformedData[i].push(t);
+                //         }
+                //     }
+                // });
+
+                // for (const [dataSetIndex, dataSet] of transformedData.entries()) {
+                //     // const transVec = new Set();
+                //     const transVec2 = new Map();
+                //     for (let i = 0; i < dataSet.length - 1; i++) {
+                //         for (let j = i + 1; j < dataSet.length; j++) {
+                //             // for (let i = 0; i < dataSet.length; i++) {
+                //             //     for (let j = 0; j < dataSet.length; j++) {
+                //             //         if (i === j) {
+                //             //             continue;
+                //             //         }
+                //             const vec = getVector(dataSet[i], dataSet[j]);
+
+                //             transVec2.set(vec, [dataSet[i], dataSet[j]]);
+
+                //             // TODO: tohle pomohlo.
+                //             // const vec2 = getVectorAsArray(dataSet[i], dataSet[j]);
+                //             // getTransformations([vec2[0], vec2[1], vec2[2]]).forEach((t, transIndex) => {
+                //             //     const s = `[${t[0]},${t[1]},${t[2]}]`;
+                //             //     transVec2.set(s, [dataSet[i], dataSet[j], transIndex]);
+                //             // });
+                //         }
+                //     }
+
+                //     const intersectVec = [...vectors[sourceScannerIndex]].filter((x) => transVec2.has(x));
+
+                //     const len = intersectVec.length;
+
+                //     if (len >= 12) {
+                //         console.log('FOUND ONE');
+
+                //         for (const vec of intersectVec) {
+                //             const a = vectors2[sourceScannerIndex].get(vec);
+                //             // pointsFromSourceScanner.add(a[0]);
+                //             // pointsFromSourceScanner.add(a[1]);
+
+                //             const b = transVec2.get(vec);
+
+                //             // TODO: NOT SOURCE
+                //             // pointsFromSourceScanner.add(b[0]);
+                //             // pointsFromSourceScanner.add(b[1]);
+
+                //             if (!scannerLocations[scannerIndex] && sourceScannerIndex !== 0) {
+                //                 scannerLocations[sourceScannerIndex];
+
+                //                 let xxscan;
+
+                //                 // musim najit ktera transformace tady ma byt
+                //                 // if (scannerIndex === 2) {
+                //                 //     xxscan = [
+                //                 //         b[0][0] - scannerLocations[sourceScannerIndex][0] - a[0][0],
+                //                 //         b[0][1] - scannerLocations[sourceScannerIndex][1] - a[0][1],
+                //                 //         b[0][2] - scannerLocations[sourceScannerIndex][2] - a[0][2],
+                //                 //     ];
+                //                 // } else {
+
+                //                 xxscan = [
+                //                     -(a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0]),
+                //                     a[0][1] + scannerLocations[sourceScannerIndex][1] - b[0][1],
+                //                     -(a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2]),
+                //                 ];
+
+                //                 // // 7 je -x, -z, -y]
+                //                 // xxscan = [
+                //                 //     a[0][0] - scannerLocations[sourceScannerIndex][0] - b[0][0],
+                //                 //     a[0][1] - scannerLocations[sourceScannerIndex][1] - b[0][1],
+                //                 //     a[0][2] - scannerLocations[sourceScannerIndex][2] - b[0][2],
+                //                 // ];
+
+                //                 // }
+
+                //                 //1105,-1205,1229 SCANNER 2
+                //                 scannerLocations[scannerIndex] = xxscan;
+
+                //                 console.log(xxscan);
+                //             }
+
+                //             // TODO: this must be relative to scanner 0
+                //             const scannerLocation = [a[0][0] - b[0][0], a[0][1] - b[0][1], a[0][2] - b[0][2]];
+                //             if (!scannerLocations[scannerIndex]) {
+                //                 scannerLocations[scannerIndex] = scannerLocation;
+                //             } else {
+                //                 // check if same
+                //                 if (scannerLocations[scannerIndex].toString() !== scannerLocation.toString()) {
+                //                     // TODO: enable this check
+                //                     // throw new Error('different scanner locations, but should be the same');
+                //                 }
+                //             }
+                //         }
+
+                //         // finalVectors.set(`${sourceScannerIndex}-${scannerIndex}`, pointsFromSourceScanner);
+                //         // console.log(dataSet, len, pointsFromSourceScanner);
+
+                //         if (sourceScannerIndex !== 0) {
+                //             // TODO: musim prepocitat na souradnice z scanneru 0
+                //             console.log('a');
+                //         }
+                //     }
+                // }
             }
         }
     }
+
+    // ENDE
+    console.log(scannerTransformations);
 
     if (TEST) {
         if (scannerLocations[1].toString() !== `68,-1246,-43`) {
@@ -468,22 +643,27 @@ const main = (input: string, partTwo = false) => {
     const finalPoints = new Set();
     for (let i = 0; i < scanners.length; i++) {
         const scannerLocation = scannerLocations[i];
+        const scannerTransformation = scannerTransformations[i];
         for (let j = 0; j < scanners[i].length; j++) {
-            const scanner = scanners[i][j];
+            const scannerRaw = scanners[i][j];
+            const scanner = transform(scannerTransformation, scannerRaw);
             const point = [
                 scannerLocation[0] + scanner[0],
                 scannerLocation[1] + scanner[1],
                 scannerLocation[2] + scanner[2],
             ];
 
-            finalPoints.add(point);
+            // finalPoints.add(point.toString());
+            finalPoints.add(transform(scannerTransformation, [point[0], point[1], point[2]]).toString());
         }
     }
 
-    const sortedFinal = [...finalPoints].sort((a, b) => a[0] - b[0]);
+    // const sortedFinal = [...finalPoints].sort((a, b) => a[0] - b[0]);
 
     return finalPoints.size;
 };
+
+// -------------
 
 const main2 = (input: string, partTwo = false) => {
     const scannersRaw = input.split('\n\n');
@@ -497,16 +677,68 @@ const main2 = (input: string, partTwo = false) => {
             .map((s) => s.split(',').map(Number));
     }
 
-    for (const rotX of [-1, 1]) {
-        for (const rotY of [-1, 1]) {
-            for (const rotZ of [-1, 1]) {
+    const solvedScanners = [0];
+
+    // scanner I am trying to solve
+    for (let unsolvedScannerIndex = 0; unsolvedScannerIndex < scanners.length; unsolvedScannerIndex++) {
+        if (solvedScanners.includes(unsolvedScannerIndex)) {
+            continue;
+        }
+
+        // scanner that I will try to be the solution
+        for (let testedScannerIndex = 0; testedScannerIndex < scanners.length; testedScannerIndex++) {
+            if (testedScannerIndex === unsolvedScannerIndex) {
+                continue;
+            }
+
+            for (const trans of getTransformations()) {
+                const distances = new Map();
+
+                for (
+                    let unsolvedBeamIndex = 0;
+                    unsolvedBeamIndex < scanners[unsolvedScannerIndex].length;
+                    unsolvedBeamIndex++
+                ) {
+                    const unsolvedBeam = scanners[unsolvedScannerIndex][unsolvedBeamIndex];
+
+                    for (
+                        let testedBeamIndex = 0;
+                        testedBeamIndex < scanners[testedScannerIndex].length;
+                        testedBeamIndex++
+                    ) {
+                        const testedBeam = scanners[testedScannerIndex][testedBeamIndex];
+                        const transformedTestedBeam = transform(trans, testedBeam);
+
+                        const distX = transformedTestedBeam[0] - unsolvedBeam[0];
+                        const distY = transformedTestedBeam[1] - unsolvedBeam[1];
+                        const distZ = transformedTestedBeam[2] - unsolvedBeam[2];
+
+                        const key = `${distX}_${distY}_${distZ}`;
+                        if (!distances.has(key)) {
+                            distances.set(key, 1);
+                        } else {
+                            distances.set(key, distances.get(key) + 1);
+                        }
+                    }
+                }
+
+                for (const [k, v] of distances) {
+                    if (v >= 12) {
+                        console.log(k, v);
+                    }
+                }
+
+                console.log(distances);
             }
         }
     }
+
+    return 1;
 };
 
 (async () => {
     // try {
+    // utils.testPart1(main, testInput1);
     utils.testPart1(main, testInput1);
 
     // const input = await utils.getInputData(2021, 20);
