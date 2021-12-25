@@ -1,7 +1,6 @@
 import * as utils from './utils';
-import ndarray from 'ndarray';
 
-const TEST = 1;
+const TEST = true;
 
 const testInput1 = {
     input: `--- scanner 0 ---
@@ -141,7 +140,7 @@ const testInput1 = {
 -652,-548,-490
 30,-46,-14`,
     expected: 79,
-    // expectedPartTwo: 3351,
+    expectedPartTwo: 3621,
 };
 
 const distance = (a: [x: number, y: number, z: number], b: [x: number, y: number, z: number]) =>
@@ -166,84 +165,82 @@ const getTransformations = () => {
     // });
     // return trans;
 
-    // trans.push([x, y, z]); /* TRANS = 0 */
-    // trans.push([1, 2, 3]);
+    // // trans.push([x, y, z]); /* TRANS = 0 */
+    // // trans.push([1, 2, 3]);
     trans.push([1, 1, 1, 0, 1, 2]);
 
-    // ROT 2 ( ''_ ): [front 1=x, top 2=-z, left 3=y] - (x, y, z) => (x, -z, y)
-    // trans.push([s1, s2, s3]);
-    // trans.push([x, -z, y]); /* TRANS = 1 */
-    trans.push([1, 1, 1, 0, 2, 1]);
+    // // // ROT 2 ( ''_ ): [front 1=x, top 2=-z, left 3=y] - (x, y, z) => (x, -z, y)
+    // // // trans.push([s1, s2, s3]);
+    // // // trans.push([x, -z, y]); /* TRANS = 1 */
+    trans.push([1, -1, 1, 0, 2, 1]);
 
-    // ROT 3 ( ꓞ ): [front 1=x, top 4=-y, left 2=-z] - (x, y, z) => (x, -y, -z)
-    // trans.push([s1, s4, s2]);
-    // trans.push([x, -y, -z]); /* TRANS = 2 */
+    // // // ROT 3 ( ꓞ ): [front 1=x, top 4=-y, left 2=-z] - (x, y, z) => (x, -y, -z)
+    // // // trans.push([s1, s4, s2]);
+    // // // trans.push([x, -y, -z]); /* TRANS = 2 */
     trans.push([1, -1, -1, 0, 1, 2]);
 
-    // ROT 4 ( -,, ): [front 1=x, top 5=z, left 4=-y] - (x, y, z) => (x, z, -y)
-    // trans.push([s1, s5, s4]);
-    // trans.push([x, z, y]); /* TRANS = 3 */
-    trans.push([1, 1, 1, 0, 2, 1]);
+    // // ROT 4 ( -,, ): [front 1=x, top 5=z, left 4=-y] - (x, y, z) => (x, z, -y)
+    // // trans.push([s1, s5, s4]);
+    // // trans.push([x, z, y]); /* TRANS = 3 */
+    trans.push([1, 1, -1, 0, 2, 1]);
 
-    // FACE 2,[front 6=-x]
+    // // FACE 2,[front 6=-x]
 
-    // ROT 1 ( F ): [front 6=-x, top 3=y, left 2=-z] - (x, y, z) => (-x, y, -z)
-    // trans.push([s6, s3, s2]);
-    // trans.push([-x, y, -z]); /* TRANS = 4 */
+    // // ROT 1 ( F ): [front 6=-x, top 3=y, left 2=-z] - (x, y, z) => (-x, y, -z)
+    // // trans.push([s6, s3, s2]);
+    // // trans.push([-x, y, -z]); /* TRANS = 4 */
     trans.push([-1, 1, -1, 0, 1, 2]);
 
-    // ROT 2 ( ''_ ): [front 6=-x, top 5=z, left 3=y] - (x, y, z) => (-x, z, y)
-    // trans.push([s6, s5, s3]);
-    // trans.push([-x, z, y]); /* TRANS = 5 */
+    // // ROT 2 ( ''_ ): [front 6=-x, top 5=z, left 3=y] - (x, y, z) => (-x, z, y)
+    // // trans.push([s6, s5, s3]);
+    // // trans.push([-x, z, y]); /* TRANS = 5 */
     trans.push([-1, 1, 1, 0, 2, 1]);
 
-    // ROT 3 ( ꓞ ): [front 6=-x, top 4=-y, left 5=z] - (x, y, z) => (-x, -y, z)
-    // trans.push([s6, s4, s5]);
-    // trans.push([-x, -y, z]); /* TRANS = 6 */
+    // // ROT 3 ( ꓞ ): [front 6=-x, top 4=-y, left 5=z] - (x, y, z) => (-x, -y, z)
+    // // trans.push([s6, s4, s5]);
+    // // trans.push([-x, -y, z]); /* TRANS = 6 */
     trans.push([-1, -1, 1, 0, 1, 2]);
 
-    // ROT 4 ( -,, ): [front 6=-x, top 2=-z, left 5=-y] - (x, y, z) => (-x, -z, -y)
-    // trans.push([s6, s2, s4]);
-    // trans.push([-x, -z, -y]); /* TRANS = 7 */
+    // // ROT 4 ( -,, ): [front 6=-x, top 2=-z, left 5=-y] - (x, y, z) => (-x, -z, -y)
+    // // trans.push([s6, s2, s4]);
+    // // trans.push([-x, -z, -y]); /* TRANS = 7 */
     trans.push([-1, -1, -1, 0, 2, 1]);
 
-    //...
-
-    // FACE 3, [front 3=y]
-    // trans.push([y, -x, z]); /* TRANS = 8 */
-    // trans.push([y, -z, -x]); /* TRANS = 9 */
-    // trans.push([y, x, -z]); /* TRANS = 10 */
-    // trans.push([y, z, x]); /* TRANS = 11 */
+    // // FACE 3, [front 3=y]
+    // // trans.push([y, -x, z]); /* TRANS = 8 */
+    // // trans.push([y, -z, -x]); /* TRANS = 9 */
+    // // trans.push([y, x, -z]); /* TRANS = 10 */
+    // // trans.push([y, z, x]); /* TRANS = 11 */
     trans.push([1, -1, 1, 1, 0, 2]);
     trans.push([1, -1, -1, 1, 2, 0]);
     trans.push([1, 1, -1, 1, 0, 2]);
     trans.push([1, 1, 1, 1, 2, 0]);
 
-    // FACE 4, [front 4=-y]
-    // trans.push([-y, x, z]); /* TRANS = 12 */
-    // trans.push([-y, -z, x]); /* TRANS = 13 */
-    // trans.push([-y, -x, -z]); /* TRANS = 14 */
-    // trans.push([-y, z, -x]); /* TRANS = 15 */
+    // // FACE 4, [front 4=-y]
+    // // trans.push([-y, x, z]); /* TRANS = 12 */
+    // // trans.push([-y, -z, x]); /* TRANS = 13 */
+    // // trans.push([-y, -x, -z]); /* TRANS = 14 */
+    // // trans.push([-y, z, -x]); /* TRANS = 15 */
     trans.push([-1, 1, 1, 1, 0, 2]);
     trans.push([-1, -1, 1, 1, 2, 0]);
     trans.push([-1, -1, -1, 1, 0, 2]);
     trans.push([-1, 1, -1, 1, 2, 0]);
 
-    // FACE 5, [front 5=z]
-    // trans.push([z, x, y]); /* TRANS = 16 */
-    // trans.push([z, -y, x]); /* TRANS = 17 */
-    // trans.push([z, -x, -y]); /* TRANS = 18 */
-    // trans.push([z, y, -x]); /* TRANS = 19 */
-    trans.push([1, 1, -1, 2, 0, 1]);
+    // // FACE 5, [front 5=z]
+    // // trans.push([z, x, y]); /* TRANS = 16 */
+    // // trans.push([z, -y, x]); /* TRANS = 17 */
+    // // trans.push([z, -x, -y]); /* TRANS = 18 */
+    // // trans.push([z, y, -x]); /* TRANS = 19 */
+    trans.push([1, 1, 1, 2, 0, 1]); //??
     trans.push([1, -1, 1, 2, 1, 0]);
     trans.push([1, -1, -1, 2, 0, 1]);
     trans.push([1, 1, -1, 2, 1, 0]);
 
-    // FACE 6, [front 2=-z]
-    // trans.push([-z, x, -y]); /* TRANS = 20 */
-    // trans.push([-z, y, x]); /* TRANS = 21 */
-    // trans.push([-z, -x, y]); /* TRANS = 22 */
-    // trans.push([-z, -y, -x]); /* TRANS = 23 */
+    // // FACE 6, [front 2=-z]
+    // // trans.push([-z, x, -y]); /* TRANS = 20 */
+    // // trans.push([-z, y, x]); /* TRANS = 21 */
+    // // trans.push([-z, -x, y]); /* TRANS = 22 */
+    // // trans.push([-z, -y, -x]); /* TRANS = 23 */
     trans.push([-1, 1, -1, 2, 0, 1]);
     trans.push([-1, 1, 1, 2, 1, 0]);
     trans.push([-1, -1, 1, 2, 0, 1]);
@@ -290,7 +287,7 @@ const mapInc = (map, key) => {
     }
 };
 
-const main = (input: string, partTwo = false) => {
+const mainX = (input: string, partTwo = false) => {
     const scannersRaw = input.split('\n\n');
 
     const scanners = [];
@@ -391,14 +388,15 @@ const main = (input: string, partTwo = false) => {
 
                     const intersectVec = [...vectors[sourceScannerIndex]].filter((x) => beaconVectors.has(x));
 
-                    if (intersectVec.length >= 12) {
+                    if (intersectVec.length >= 120 /*12*/) {
                         console.log('MATCH', sourceScannerIndex, scannerIndex, intersectVec, trans);
 
                         // TODO: --
 
-                        const distancesX = new Map();
-                        const distancesY = new Map();
-                        const distancesZ = new Map();
+                        // const distancesX = new Map();
+                        // const distancesY = new Map();
+                        // const distancesZ = new Map();
+                        const distances3D = new Map();
                         for (let i = 0; i < scanners[sourceScannerIndex].length; i++) {
                             const sourcePoint = scanners[sourceScannerIndex][i];
                             for (let j = 0; j < scanners[scannerIndex].length; j++) {
@@ -408,31 +406,51 @@ const main = (input: string, partTwo = false) => {
                                 const dY = sourcePoint[1] - t[1];
                                 const dZ = sourcePoint[2] - t[2];
 
-                                mapInc(distancesX, dX);
-                                mapInc(distancesY, dY);
-                                mapInc(distancesZ, dZ);
+                                // mapInc(distancesX, dX);
+                                // mapInc(distancesY, dY);
+                                // mapInc(distancesZ, dZ);
+
+                                mapInc(distances3D, `[${dX}, ${dY}, ${dZ}]`);
                             }
                         }
 
-                        let originX = -666;
-                        let originY = -666;
-                        let originZ = -666;
+                        // let originX = -666;
+                        // let originY = -666;
+                        // let originZ = -666;
 
-                        for (const [k, v] of distancesX) {
+                        // for (const [k, v] of distancesX) {
+                        //     if (v >= 12) {
+                        //         if (originX !== -666) {
+                        //             console.error('ERROR: originX !== -666');
+                        //         }
+
+                        //         originX = k;
+                        //         // break;
+                        //     }
+                        // }
+                        // for (const [k, v] of distancesY) {
+                        //     if (v >= 12) {
+                        //         if (originY !== -666) {
+                        //             console.error('ERROR: originY !== -666');
+                        //         }
+                        //         originY = k;
+                        //         // break;
+                        //     }
+                        // }
+                        // for (const [k, v] of distancesZ) {
+                        //     if (v >= 12) {
+                        //         if (originZ !== -666) {
+                        //             console.error('ERROR: originZ !== -666');
+                        //         }
+                        //         originZ = k;
+                        //         // break;
+                        //     }
+                        // }
+
+                        let origin;
+                        for (const [k, v] of distances3D) {
                             if (v >= 12) {
-                                originX = k;
-                                break;
-                            }
-                        }
-                        for (const [k, v] of distancesY) {
-                            if (v >= 12) {
-                                originY = k;
-                                break;
-                            }
-                        }
-                        for (const [k, v] of distancesZ) {
-                            if (v >= 12) {
-                                originZ = k;
+                                origin = k;
                                 break;
                             }
                         }
@@ -441,34 +459,102 @@ const main = (input: string, partTwo = false) => {
                         // TODO: proc mi to sem leze i kdyz mam scannerIndex = 0 ?
                         if (
                             !scannerLocations[scannerIndex] &&
-                            originX !== -666 &&
-                            originY !== -666 &&
-                            originZ !== -666
+                            scannerIndex !== 0
+                            // originX !== -666 &&
+                            // originY !== -666 &&
+                            // originZ !== -666
                         ) {
                             // TODO: proc mam spatne ty rotace tady. jak to zjistim? co s cim a jaky znainka
                             // originX=160    =>   160 + -68 -  = -92
                             // originY=-1134  => -1134 + -1246 = -2380
                             // originZ=-23    =>   -23 - -43 = 20
 
-                            originX =
-                                scannerLocations[sourceScannerIndex][0] +
-                                scannerTransformations[sourceScannerIndex][0] * originX;
-                            originY =
-                                scannerLocations[sourceScannerIndex][1] +
-                                scannerTransformations[sourceScannerIndex][1] * originY;
-                            originZ =
-                                scannerLocations[sourceScannerIndex][2] +
-                                scannerTransformations[sourceScannerIndex][2] * originZ;
+                            // ----
 
+                            // scanner2 (sourceScannerIndex = 4)
+                            // originX = 168
+                            // originY = -1125
+                            // originZ = 72
+
+                            // sourceX -20,
+                            // sourceY -1133
+                            // sourceZ 1061
+
+                            // goalX 1105
+                            // goalY -1205 HOTOVO
+                            // goalZ 1229
+
+                            // X: ??? (musim pridat -) 1061 (sourceZ) - originZ    = 1105  ZATIM NEMAM  ( 1061+72 =1133)
+                            // Y: -1133 (sourceY) + -1 (trans) * origin[trans[4]=>2] 72 ==> -1133 + -72 = -1205 == TO JE OK
+
+                            // Z: 1061+168=1229 (nevim jak to udelat)
+                            // Z: (originX + sourceZ) * -1
+
+                            // trans4: [1, -1, -1, 1, 2, 0]
+
+                            // v-trans4
+                            // x y =>   168 (originX) +  1061 (scannerZ) = 1229
+                            // y z =>    72 (originZ) + -1133 (scannerY) = -1205
+                            // z x => -1125 (originY) -   -20 (scannerX) = -1133
+
+                            // todo: dvojta tranformce??
+
+                            if (!scannerTransformations[sourceScannerIndex]) {
+                                continue;
+                            }
+
+                            // const origin = [originX, originY, originZ];
+                            // const translatedOrigin = transform(scannerTransformations[sourceScannerIndex], [
+                            //     originX,
+                            //     originY,
+                            //     originZ,
+                            // ]);
+
+                            // const pokusX = 1 * translatedOrigin[0] + scannerLocations[sourceScannerIndex][0];
+                            // const pokusY = 1 * translatedOrigin[1] + scannerLocations[sourceScannerIndex][1];
+                            // const pokusZ = 1 * translatedOrigin[2] + scannerLocations[sourceScannerIndex][2];
+
+                            // originX =
+                            //     scannerLocations[sourceScannerIndex][0] +
+                            //     scannerTransformations[sourceScannerIndex][0] *
+                            //         origin[scannerTransformations[sourceScannerIndex][3]];
+                            // originY =
+                            //     scannerLocations[sourceScannerIndex][1] +
+                            //     scannerTransformations[sourceScannerIndex][1] *
+                            //         origin[scannerTransformations[sourceScannerIndex][4]];
+                            // originZ =
+                            //     scannerLocations[sourceScannerIndex][2] +
+                            //     scannerTransformations[sourceScannerIndex][2] *
+                            //         origin[scannerTransformations[sourceScannerIndex][5]];
+
+                            // TODO: u toho scanneru 2 musim asi jeste otocit neco..
                             // 1: 68,-1246,-43
                             // 2: 1105,-1205,1229
                             // 3: -92,-2380,-20
                             // 4: -20,-1133,1061
 
-                            scannerLocations[scannerIndex] = [originX, originY, originZ];
+                            // scannerLocations[scannerIndex] = [originX, originY, originZ];
+
+                            const originParsed = JSON.parse(origin);
+                            scannerLocations[scannerIndex] = originParsed;
                             scannerTransformations[scannerIndex] = trans;
+
+                            for (let i = 0; i < scanners[scannerIndex].length; i++) {
+                                if (scannerIndex === 2) {
+                                    scanners[scannerIndex][i] = transform(
+                                        scannerTransformations[4],
+                                        scanners[scannerIndex][i],
+                                    );
+                                }
+
+                                // !!!! MENIM SOURCE DATA !!!!
+                                scanners[scannerIndex][i] = transform(trans, scanners[scannerIndex][i]);
+                            }
+
                             console.log('hu');
                         }
+
+                        // const sourceTransformed = transform(trans, scannerLocations[sourceScannerIndex]);
 
                         // TODO: --
 
@@ -619,42 +705,40 @@ const main = (input: string, partTwo = false) => {
     // ENDE
     console.log(scannerTransformations);
 
-    if (TEST) {
-        if (scannerLocations[1].toString() !== `68,-1246,-43`) {
-            throw new Error('wrong scanner 1 location');
-        }
-        // if (scannerLocations[2]?.toString() !== `1105,-1205,1229`) {
-        //     throw new Error('wrong scanner 2 location');
-        // }
+    // if (TEST) {
+    //     if (scannerLocations[1].toString() !== `68,-1246,-43`) {
+    //         throw new Error('wrong scanner 1 location');
+    //     }
+    //     // if (scannerLocations[2]?.toString() !== `1105,-1205,1229`) {
+    //     //     throw new Error('wrong scanner 2 location');
+    //     // }
 
-        scannerLocations[2] = [1105, -1205, 1229];
+    //     scannerLocations[2] = [1105, -1205, 1229];
 
-        if (scannerLocations[3].toString() !== `-92,-2380,-20`) {
-            throw new Error('wrong scanner 3 location');
-        }
-        if (scannerLocations[4].toString() !== `-20,-1133,1061`) {
-            throw new Error('wrong scanner 4 location');
-        }
-    }
+    //     if (scannerLocations[3].toString() !== `-92,-2380,-20`) {
+    //         throw new Error('wrong scanner 3 location');
+    //     }
+    //     if (scannerLocations[4].toString() !== `-20,-1133,1061`) {
+    //         throw new Error('wrong scanner 4 location');
+    //     }
+    // }
 
     // projedu vsechny data, prepocitam k sceneru 0 - ale az budu mit dobre lokaci skeneru
+
+    // scannerLocations[2] = [1105, -1205, 1229];
 
     // TODO: aby mi to licovalo, musim to jeste otocit..
     const finalPoints = new Set();
     for (let i = 0; i < scanners.length; i++) {
         const scannerLocation = scannerLocations[i];
-        const scannerTransformation = scannerTransformations[i];
         for (let j = 0; j < scanners[i].length; j++) {
-            const scannerRaw = scanners[i][j];
-            const scanner = transform(scannerTransformation, scannerRaw);
+            const scanner = scanners[i][j];
             const point = [
                 scannerLocation[0] + scanner[0],
                 scannerLocation[1] + scanner[1],
                 scannerLocation[2] + scanner[2],
             ];
-
-            // finalPoints.add(point.toString());
-            finalPoints.add(transform(scannerTransformation, [point[0], point[1], point[2]]).toString());
+            finalPoints.add(point.toString());
         }
     }
 
@@ -677,17 +761,25 @@ const main2 = (input: string, partTwo = false) => {
             .map((s) => s.split(',').map(Number));
     }
 
-    const solvedScanners = [0];
+    const scannerLocations = [];
+    scannerLocations[0] = [0, 0, 0];
+    const scannerTransformations = [];
+    scannerTransformations[0] = [1, 1, 1, 0, 1, 2];
 
     // scanner I am trying to solve
     for (let unsolvedScannerIndex = 0; unsolvedScannerIndex < scanners.length; unsolvedScannerIndex++) {
-        if (solvedScanners.includes(unsolvedScannerIndex)) {
-            continue;
-        }
-
         // scanner that I will try to be the solution
         for (let testedScannerIndex = 0; testedScannerIndex < scanners.length; testedScannerIndex++) {
             if (testedScannerIndex === unsolvedScannerIndex) {
+                continue;
+            }
+            // already solved!
+            if (scannerLocations[unsolvedScannerIndex]) {
+                continue;
+            }
+
+            // tested scanner not solved yet
+            if (!scannerLocations[testedScannerIndex]) {
                 continue;
             }
 
@@ -713,47 +805,167 @@ const main2 = (input: string, partTwo = false) => {
                         const distY = transformedTestedBeam[1] - unsolvedBeam[1];
                         const distZ = transformedTestedBeam[2] - unsolvedBeam[2];
 
-                        const key = `${distX}_${distY}_${distZ}`;
-                        if (!distances.has(key)) {
-                            distances.set(key, 1);
-                        } else {
-                            distances.set(key, distances.get(key) + 1);
-                        }
+                        mapInc(distances, `[${distX},${distY},${distZ}]`);
                     }
                 }
 
+                let origin;
                 for (const [k, v] of distances) {
                     if (v >= 12) {
                         console.log(k, v);
+                        origin = JSON.parse(k);
+                        break;
                     }
                 }
 
-                console.log(distances);
+                if (!origin) {
+                    continue;
+                }
+
+                let originT = transform(trans, origin);
+                scannerLocations[unsolvedScannerIndex] = originT;
+                scannerTransformations[unsolvedScannerIndex] = trans;
+                console.log(testedScannerIndex);
+                for (let i = 0; i < scanners[unsolvedScannerIndex].length; i++) {
+                    scanners[unsolvedScannerIndex][i] = transform(trans, scanners[unsolvedScannerIndex][i]);
+                    scanners[unsolvedScannerIndex][i][0] + scannerLocations[unsolvedScannerIndex][0];
+                    scanners[unsolvedScannerIndex][i][1] + scannerLocations[unsolvedScannerIndex][1];
+                    scanners[unsolvedScannerIndex][i][2] + scannerLocations[unsolvedScannerIndex][2];
+                }
+
+                // if (TEST) {
+                //     if (unsolvedScannerIndex === 1 && scannerLocations[1].toString() !== `68,-1246,-43`) {
+                //         throw new Error('wrong scanner 1 location');
+                //     }
+                //     if (unsolvedScannerIndex === 2 && scannerLocations[2]?.toString() !== `1105,-1205,1229`) {
+                //         throw new Error('wrong scanner 2 location');
+                //     }
+                //     if (unsolvedScannerIndex === 3 && scannerLocations[3].toString() !== `-92,-2380,-20`) {
+                //         throw new Error('wrong scanner 3 location');
+                //     }
+                //     if (unsolvedScannerIndex === 4 && scannerLocations[4].toString() !== `-20,-1133,1061`) {
+                //         throw new Error('wrong scanner 4 location');
+                //     }
+                // }
+
+                break;
             }
         }
     }
 
-    return 1;
+    const finalPoints = new Set();
+    for (let i = 0; i < scanners.length; i++) {
+        for (let j = 0; j < scanners[i].length; j++) {
+            finalPoints.add(scanners[i][j].toString());
+        }
+    }
+    return finalPoints.size;
+};
+
+// test 33 -----
+
+const findMatch = (scanners, scannerSolved, scannerTested) => {
+    for (const trans of getTransformations()) {
+        const distances = new Map();
+        for (const beamSolved of scanners[scannerSolved]) {
+            for (const beamTested of scanners[scannerTested]) {
+                const transBeam = transform(trans, beamTested);
+                mapInc(
+                    distances,
+                    `[${beamSolved[0] - transBeam[0]},${beamSolved[1] - transBeam[1]},${beamSolved[2] - transBeam[2]}]`,
+                );
+            }
+        }
+        for (const [k, v] of distances) {
+            if (v >= 12) {
+                return { trans, origin: JSON.parse(k) };
+            }
+        }
+    }
+};
+
+const main = (input: string, partTwo = false) => {
+    const scannersRaw = input.split('\n\n').filter(Boolean);
+
+    const scanners = [];
+    let scannersIndex = 0;
+    for (const scannerRaw of scannersRaw) {
+        scanners[scannersIndex++] = scannerRaw
+            .split('\n')
+            .filter(Boolean)
+            .filter((s) => !s.includes('scanner'))
+            .map((s) => s.split(',').map(Number));
+    }
+
+    const scannerLocations = [[0, 0, 0]];
+    const scannerTransformations = [[1, 1, 1, 0, 1, 2]];
+    const stack = [0];
+
+    while (stack.length) {
+        const scannerIndex = stack.pop()!;
+
+        for (let i = 0; i < scanners.length; i++) {
+            if (scannerTransformations[i]) {
+                continue;
+            }
+
+            const match = findMatch(scanners, scannerIndex, i);
+
+            if (!match) {
+                continue;
+            }
+
+            scannerTransformations[i] = match.trans;
+            scannerLocations[i] = match.origin;
+
+            for (let j = 0; j < scanners[i].length; j++) {
+                scanners[i][j] = transform(match.trans, scanners[i][j]);
+                scanners[i][j][0] += match.origin[0];
+                scanners[i][j][1] += match.origin[1];
+                scanners[i][j][2] += match.origin[2];
+            }
+
+            stack.push(i);
+        }
+    }
+
+    const finalPoints = new Set();
+    for (let i = 0; i < scanners.length; i++) {
+        for (let j = 0; j < scanners[i].length; j++) {
+            finalPoints.add(scanners[i][j].toString());
+        }
+    }
+
+    if (!partTwo) {
+        return finalPoints.size;
+    }
+
+    let maxDistance = 0;
+    for (let i = 0; i < scanners.length; i++) {
+        for (let j = 0; j < scanners.length; j++) {
+            maxDistance = Math.max(
+                maxDistance,
+                Math.abs(scannerLocations[i][0] - scannerLocations[j][0]) +
+                    Math.abs(scannerLocations[i][1] - scannerLocations[j][1]) +
+                    Math.abs(scannerLocations[i][2] - scannerLocations[j][2]),
+            );
+        }
+    }
+    return maxDistance;
 };
 
 (async () => {
-    // try {
-    // utils.testPart1(main, testInput1);
     utils.testPart1(main, testInput1);
 
-    // const input = await utils.getInputData(2021, 20);
-    // const result1 = main(input);
-    // utils.test(result1, 5275);
+    const input = await utils.getInputData(2021, 19);
+    const result1 = main(input);
+    utils.test(result1, 303);
 
-    // utils.testPart2(main, testInput1);
+    utils.testPart2(main, testInput1);
 
-    // const result2 = main(input, true);
-    // utils.test(result2, 16482);
+    const result2 = main(input, true);
+    utils.test(result2, 9621);
 
-    // console.log(`Result 1: ${result1}`);
-    // console.log(`Result 2: ${result2}`);
-    // } catch (err) {
-    //     console.error(`Error: ${err}`, err);
-    //     process.exit(1);
-    // }
+    console.log(`Result 1: ${result1}`);
+    console.log(`Result 2: ${result2}`);
 })();
