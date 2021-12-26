@@ -83,9 +83,6 @@ const step = (p1p, p1s, p2p, p2s) => {
     if (cached) {
         return cached;
     }
-    if (p1s >= 21) {
-        return [1, 0];
-    }
     if (p2s >= 21) {
         return [0, 1];
     }
