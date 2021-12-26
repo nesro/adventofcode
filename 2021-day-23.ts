@@ -53,7 +53,6 @@ const testInput1 = {
   #A#D#C#A#
   #########`,
     expected: 12521,
-    expectedPartTwo: 444356092776315,
 };
 
 const main = (input: string, partTwo = false) => {
