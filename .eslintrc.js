@@ -5,7 +5,7 @@ module.exports = {
         tsconfigRootDir: __dirname,
         sourceType: 'module',
     },
-    plugins: ['@typescript-eslint/eslint-plugin', 'import', 'unicorn'],
+    plugins: ['@typescript-eslint/eslint-plugin', 'unicorn'],
     extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended', 'plugin:unicorn/all'],
     root: true,
     env: {
@@ -22,6 +22,7 @@ module.exports = {
         'unicorn/numeric-separators-style': 'off',
         'unicorn/prefer-event-target': 'off',
         'unicorn/prevent-abbreviations': 'off',
+        'unicorn/no-nested-ternary': 'off',
 
         'unicorn/prevent-abbreviations': [
             'error',
