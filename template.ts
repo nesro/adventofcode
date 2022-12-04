@@ -18,7 +18,7 @@ const main = (input: string, partTwo = false) => {
 (async () => {
     utils.testPart1(main, testInput1);
 
-    // const input = await utils.getInputData(2020, 3);
+    // const input = await utils.getInputData(2022, 5);
     // const result1 = main(input);
     // utils.test(result1, 211);
 
