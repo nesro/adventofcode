@@ -23,17 +23,6 @@ module.exports = {
         'unicorn/prefer-event-target': 'off',
         'unicorn/prevent-abbreviations': 'off',
         'unicorn/no-nested-ternary': 'off',
-
-        'unicorn/prevent-abbreviations': [
-            'error',
-            {
-                allowList: {
-                    i: true,
-                    args: true,
-                    'app.e2e-spec': true,
-                },
-                ignore: ['\\.e2e$', /^ignore/i],
-            },
-        ],
+        'unicorn/prefer-spread': 'off',
     },
 };
